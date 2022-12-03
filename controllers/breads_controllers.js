@@ -6,7 +6,7 @@ const Bread = require('../models/bread.js')
 breads.get('/', (req, res) => {
   Bread.find()
     .then(foundBreads => {
-      res.render('index', {
+      res.render('Index', {
         breads: foundBreads,
         title: 'Index Page'
       }
@@ -26,7 +26,7 @@ breads.post('/', (req, res) => {
     req.body.hasGluten = false
   }
   Bread.push(req.body)
-  res.redirect('/breads')
+  res.status(303).redirect('/breads')
 })
 
 
@@ -35,14 +35,22 @@ breads.get('/new', (req, res) => {
   res.render('new')
 })
 
+// DELETE
+breads.delete('/:indexArray', (req, res) => {
+  Bread.splice(req.params.indexArray, 1)
+  res.status(303).redirect('/breads')
+})
+
+
 // SHOW
 breads.get('/:arrayIndex', (req, res) => {
   if (Bread[req.params.arrayIndex]) {
     res.render('Show', {
-      bread: Bread[req.params.arrayIndex]
+      bread: Bread[req.params.arrayIndex],
+      index: req.params.arrayIndex,
     })
   } else {
-    res.send('404')
+    res.send('error404')
   }
 })
 module.exports = breads
