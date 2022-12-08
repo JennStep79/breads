@@ -8,10 +8,22 @@ const breadSchema = new Schema ( {
   hasGluten: Boolean,
   image: { type: String, default: 'https://images.unsplash.com/photo-1549931319-a545dcf3bc73?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8YnJlYWR8ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60' },
   baker: {
-    type: String,
-    enum: ['Rachel', 'Monica', 'Joey', 'Chandler', 'Ross', 'Phoebe']
+    type: Schema.Types.ObjectId,
+    ref: 'Baker'
   }
 })
+
+// helper methods 
+breadSchema.methods.getBakedBy = function() {
+  return `${this.name} was baked with love by ${this.baker}`
+}
+
+breadSchema.statics.getBakedBreads = function (baker) {
+  return this.find({baker: baker})
+    .then(foundBreads => {
+      console.log(foundBreads)
+    })
+}
 
 const Bread = mongoose.model('Bread', breadSchema)
 
