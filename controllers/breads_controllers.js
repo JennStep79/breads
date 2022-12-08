@@ -2,6 +2,7 @@ const express = require('express')
 const breads = express.Router()
 const Bread = require('../models/bread.js')
 const Baker = require('../models/baker.js')
+const baker = require('./bakers_controller.js')
 
 //INDEX
 breads.get('/', (req, res) => {
@@ -63,18 +64,23 @@ breads.put('/:id', (req, res) => {
 
 // EDIT
 breads.get('/:id/edit', (req, res) => {
-  Bread.findById(req.params.id)
-  .then(foundBread => {
-    res.render('edit', {
-      bread: foundBread
+  Baker.find()
+    .then(foundBakers => {
+      Bread.findById(req.params.id)
+      .then(foundBread => {
+        res.render('edit', {
+          bread: foundBread,
+          bakers: foundBakers
+        })
+      })
     })
-  })
 })
 
 
 // SHOW
 breads.get('/:id', (req, res) => {
   Bread.findById(req.params.id)
+  .populate('baker')
       .then(foundBread => {
         const bakedBy = foundBread.getBakedBy()
           res.render('show', {
