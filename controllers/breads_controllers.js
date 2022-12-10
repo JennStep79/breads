@@ -6,13 +6,17 @@ const baker = require('./bakers_controller.js')
 
 //INDEX
 breads.get('/', (req, res) => {
+  Baker.find()
+    .then(foundBakers => {
   Bread.find()
     .then(foundBreads => {
       res.render('index', {
         breads: foundBreads,
+        bakers: foundBakers,
         title: 'Index Page'
       })
     })
+  })
 })
 
 // CREATE
