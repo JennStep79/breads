@@ -20,6 +20,15 @@ baker.get('/', (req, res) => {
     })
 })
 
+// DELETE ROUTE
+baker.delete('/:id', (req, res) => {
+    Baker.findByIdAndDelete(req.params.id) 
+      .then(deletedBaker => { 
+        res.status(303).redirect('/breads')
+      })
+})
+
+
 // SHOW ROUTE
 baker.get('/:id', (req, res) => {
     Baker.findById(req.params.id)
